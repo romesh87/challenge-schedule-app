@@ -1,6 +1,7 @@
-import { FunctionComponent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { API_ROOT } from "../../constants";
+import { IAppointment, IPatient, IDoctor } from "../../types";
 
 import AppointmentItem from "../AppointmentItem";
 import Modal from "../UI/Modal";
@@ -9,12 +10,12 @@ import styles from "./AppointmentList.module.css";
 
 interface Props {}
 
-const AppointmentList: FunctionComponent<Props> = (props: Props) => {
+const AppointmentList: React.FC<Props> = () => {
   const [loading, setLoading] = useState(true);
 
-  const [appointments, setAppointments] = useState([]);
-  const [patients, setPatients] = useState([]);
-  const [doctors, setDoctors] = useState([]);
+  const [appointments, setAppointments] = useState<IAppointment[]>([]);
+  const [patients, setPatients] = useState<IPatient[]>([]);
+  const [doctors, setDoctors] = useState<IDoctor[]>([]);
 
   const [showModal, setShowModal] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
@@ -30,13 +31,13 @@ const AppointmentList: FunctionComponent<Props> = (props: Props) => {
       .then((data) => {
         setLoading(false);
         setAppointments(data.appointments);
-
+        
         return fetch(`${API_ROOT}/patients`);
       })
       .then((response) => response.json())
       .then((data) => {
         setPatients(data.patients);
-
+       
         return fetch(`${API_ROOT}/doctors`);
       })
       .then((response) => response.json())
@@ -50,8 +51,6 @@ const AppointmentList: FunctionComponent<Props> = (props: Props) => {
   };
 
   const onCancelHandler = (id: string) => {
-    console.log({ id });
-
     fetch(`${API_ROOT}/appointments/${id}`, {
       method: "DELETE",
       body: JSON.stringify({ reason: "Cancelled" }),
@@ -93,24 +92,26 @@ const AppointmentList: FunctionComponent<Props> = (props: Props) => {
   };
 
   if (loading) {
-    return <h4 style={{ margin: "auto" }}>Loading...</h4>;
+    return (
+      <div style={{ margin: "auto", textAlign: "center" }}>
+        <h2>Loading...</h2>
+      </div>
+    );
   }
 
   const newAppointments = appointments
-    .filter((appointment: any) => appointment.status === "new")
-    .map((appointment: any) => (
+    .filter((appointment) => appointment.status === "new")
+    .map((appointment) => (
       <AppointmentItem
         key={appointment.id}
         appointment={appointment}
         patient={
           patients &&
-          patients.filter(
-            (patient: any) => patient.id === appointment.patientID
-          )[0]
+          patients.filter((patient) => patient.id === appointment.patientID)[0]
         }
         doctor={
           doctors &&
-          doctors.filter((doctor: any) => doctor.id === appointment.doctorID)[0]
+          doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
         }
         onCancel={onCancelHandler}
         onConfirm={onConfirmHandler}
@@ -118,20 +119,18 @@ const AppointmentList: FunctionComponent<Props> = (props: Props) => {
     ));
 
   const confirmedAppointments = appointments
-    .filter((appointment: any) => appointment.status === "confirmed")
-    .map((appointment: any) => (
+    .filter((appointment) => appointment.status === "confirmed")
+    .map((appointment) => (
       <AppointmentItem
         key={appointment.id}
         appointment={appointment}
         patient={
           patients &&
-          patients.filter(
-            (patient: any) => patient.id === appointment.patientID
-          )[0]
+          patients.filter((patient) => patient.id === appointment.patientID)[0]
         }
         doctor={
           doctors &&
-          doctors.filter((doctor: any) => doctor.id === appointment.doctorID)[0]
+          doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
         }
         onCancel={onCancelHandler}
         onConfirm={onConfirmHandler}
@@ -139,20 +138,18 @@ const AppointmentList: FunctionComponent<Props> = (props: Props) => {
     ));
 
   const completedAppointments = appointments
-    .filter((appointment: any) => appointment.status === "completed")
-    .map((appointment: any) => (
+    .filter((appointment) => appointment.status === "completed")
+    .map((appointment) => (
       <AppointmentItem
         key={appointment.id}
         appointment={appointment}
         patient={
           patients &&
-          patients.filter(
-            (patient: any) => patient.id === appointment.patientID
-          )[0]
+          patients.filter((patient) => patient.id === appointment.patientID)[0]
         }
         doctor={
           doctors &&
-          doctors.filter((doctor: any) => doctor.id === appointment.doctorID)[0]
+          doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
         }
         onCancel={onCancelHandler}
         onConfirm={onConfirmHandler}
@@ -160,20 +157,18 @@ const AppointmentList: FunctionComponent<Props> = (props: Props) => {
     ));
 
   const canceledAppointments = appointments
-    .filter((appointment: any) => appointment.status === "cancelled")
-    .map((appointment: any) => (
+    .filter((appointment) => appointment.status === "cancelled")
+    .map((appointment) => (
       <AppointmentItem
         key={appointment.id}
         appointment={appointment}
         patient={
           patients &&
-          patients.filter(
-            (patient: any) => patient.id === appointment.patientID
-          )[0]
+          patients.filter((patient) => patient.id === appointment.patientID)[0]
         }
         doctor={
           doctors &&
-          doctors.filter((doctor: any) => doctor.id === appointment.doctorID)[0]
+          doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
         }
         onCancel={onCancelHandler}
         onConfirm={onConfirmHandler}
@@ -207,18 +202,20 @@ const AppointmentList: FunctionComponent<Props> = (props: Props) => {
       <Modal show={showModal}>
         <div className={styles.modalContainer}>
           <h2 className={styles.modalTitle}>Confirm appointment</h2>
-          {/* <div className={styles.modalSelectContainer}> */}
+
           <select
             className={styles.modalSelect}
             value={selectedDoctorId}
             onChange={(e) => setSelectedDoctorId(e.target.value)}
           >
             <option value="">Please select a doctor...</option>
-            {doctors.map((doctor: any) => (
-              <option value={doctor.id}>{doctor.name}</option>
+            {doctors.map((doctor) => (
+              <option key={doctor.id} value={doctor.id}>
+                {doctor.name}
+              </option>
             ))}
           </select>
-          {/* </div> */}
+
           <div className={styles.modalBtnContainer}>
             <button
               type="button"

@@ -1,26 +1,25 @@
-import { FunctionComponent } from "react";
 import Moment from "react-moment";
+
+import { IAppointment, IPatient, IDoctor } from "../../types";
 
 import styles from "./AppointmentItem.module.css";
 
 export interface Props {
-  appointment: {
-    id: string;
-    requestReason: string;
-    requestedDate: string;
-    status: string;
-    statusReason?: string;
-    patientID?: string;
-    doctorID?: string;
-  };
-  patient: any;
-  doctor: any;
+  appointment: IAppointment;
+  patient: IPatient;
+  doctor: IDoctor;
   onCancel: (id: string) => void;
   onConfirm: (id: string) => void;
 }
 
-const AppointmentItem: FunctionComponent<Props> = (props: Props) => {
-  const { id, requestReason, requestedDate, status, statusReason } = props.appointment;
+const AppointmentItem: React.FC<Props> = (props) => {
+  const { 
+    id, 
+    requestReason, 
+    requestedDate, 
+    status, 
+    statusReason 
+  } = props.appointment;
   const { patient, doctor } = props;
 
   const renderActions = () => {
