@@ -2,6 +2,7 @@ import './App.css';
 
 import NavBar from './components/NavBar';
 import Sidebar from './components/Sidebar';
+import AppointmentList from './components/AppointmentList';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <div className="container">
         <Sidebar />
         <main>
-          <h2>Replace me with your own code!</h2>
+          <AppointmentList />
         </main>
       </div>
     </>
