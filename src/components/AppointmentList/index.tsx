@@ -1,3 +1,3 @@
-import AppointmentList from './AppointmentList';
+import AppointmentList from "./AppointmentList";
 
 export default AppointmentList;

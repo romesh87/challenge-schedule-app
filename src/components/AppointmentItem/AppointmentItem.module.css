@@ -1,19 +1,17 @@
+.listItem {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-@media (min-width: 768px) {
-  .container {
-    flex-direction: row;
-  }
-}
-
-
 .section {
   display: flex;
-  flex-direction: column;
   flex: 1;
   gap: 8px;
   padding: 10px 5px;
@@ -26,11 +24,19 @@
 }
 
 .disabled {
-  pointer-events: none; 
-  opacity: 0.6;        
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .btn {
+  outline: none;
+  cursor: pointer;
   display: inline-block;
   margin: 0 5px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
 }

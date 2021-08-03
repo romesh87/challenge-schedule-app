@@ -1,6 +1,6 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent } from "react";
 
-import './NavBar.css';
+import "./NavBar.css";
 
 interface Props {}
 

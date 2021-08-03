@@ -28,7 +28,7 @@ nav ul li {
   align-items: center;
 }
 nav ul li:first-of-type {
-  flex: 1
+  flex: 1;
 }
 nav ul li:not(:first-of-type) {
   margin-left: 0.5em;

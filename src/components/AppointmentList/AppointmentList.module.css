@@ -3,3 +3,61 @@
   max-width: 90%;
   border-bottom: 1px solid #eee;
 }
+
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.modalTitle {
+  text-align: center;
+}
+
+.modalSelect {
+  outline: none;
+  width: 90%;
+  height: 35px;
+  border-radius: 4px;
+  background-color: #eee;
+  padding: 0 10px;
+  background-color: whitesmoke;
+}
+
+.modalBtnContainer {
+  margin-top: 20px;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modalBtnConfirm {
+  outline: none;
+  cursor: pointer;
+  display: block;
+  width: 100px;
+  height: 35px;
+  background-color: darkgray;
+  color: white;
+  border-radius: 5px;
+  border: none;
+}
+
+.modalBtnConfirm:hover {
+  background-color: rgb(80, 79, 79);
+}
+
+.modalBtnCancel {
+  outline: none;
+  cursor: pointer;
+  display: block;
+  width: 100px;
+  height: 35px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.modalBtnCancel:hover {
+  background-color: #eee;
+}
