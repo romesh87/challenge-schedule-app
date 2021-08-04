@@ -31,13 +31,13 @@ const AppointmentList: React.FC<Props> = () => {
       .then((data) => {
         setLoading(false);
         setAppointments(data.appointments);
-        
+
         return fetch(`${API_ROOT}/patients`);
       })
       .then((response) => response.json())
       .then((data) => {
         setPatients(data.patients);
-       
+
         return fetch(`${API_ROOT}/doctors`);
       })
       .then((response) => response.json())
@@ -91,6 +91,29 @@ const AppointmentList: React.FC<Props> = () => {
     }
   };
 
+  const renderAppointments = (status: string) => {
+    return appointments
+      .filter((appointment) => appointment.status === status)
+      .map((appointment) => (
+        <AppointmentItem
+          key={appointment.id}
+          appointment={appointment}
+          patient={
+            patients &&
+            patients.filter(
+              (patient) => patient.id === appointment.patientID
+            )[0]
+          }
+          doctor={
+            doctors &&
+            doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
+          }
+          onCancel={onCancelHandler}
+          onConfirm={onConfirmHandler}
+        />
+      ));
+  };
+
   if (loading) {
     return (
       <div style={{ margin: "auto", textAlign: "center" }}>
@@ -99,104 +122,28 @@ const AppointmentList: React.FC<Props> = () => {
     );
   }
 
-  const newAppointments = appointments
-    .filter((appointment) => appointment.status === "new")
-    .map((appointment) => (
-      <AppointmentItem
-        key={appointment.id}
-        appointment={appointment}
-        patient={
-          patients &&
-          patients.filter((patient) => patient.id === appointment.patientID)[0]
-        }
-        doctor={
-          doctors &&
-          doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
-        }
-        onCancel={onCancelHandler}
-        onConfirm={onConfirmHandler}
-      />
-    ));
-
-  const confirmedAppointments = appointments
-    .filter((appointment) => appointment.status === "confirmed")
-    .map((appointment) => (
-      <AppointmentItem
-        key={appointment.id}
-        appointment={appointment}
-        patient={
-          patients &&
-          patients.filter((patient) => patient.id === appointment.patientID)[0]
-        }
-        doctor={
-          doctors &&
-          doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
-        }
-        onCancel={onCancelHandler}
-        onConfirm={onConfirmHandler}
-      />
-    ));
-
-  const completedAppointments = appointments
-    .filter((appointment) => appointment.status === "completed")
-    .map((appointment) => (
-      <AppointmentItem
-        key={appointment.id}
-        appointment={appointment}
-        patient={
-          patients &&
-          patients.filter((patient) => patient.id === appointment.patientID)[0]
-        }
-        doctor={
-          doctors &&
-          doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
-        }
-        onCancel={onCancelHandler}
-        onConfirm={onConfirmHandler}
-      />
-    ));
-
-  const canceledAppointments = appointments
-    .filter((appointment) => appointment.status === "cancelled")
-    .map((appointment) => (
-      <AppointmentItem
-        key={appointment.id}
-        appointment={appointment}
-        patient={
-          patients &&
-          patients.filter((patient) => patient.id === appointment.patientID)[0]
-        }
-        doctor={
-          doctors &&
-          doctors.filter((doctor) => doctor.id === appointment.doctorID)[0]
-        }
-        onCancel={onCancelHandler}
-        onConfirm={onConfirmHandler}
-      />
-    ));
-
   return (
     <>
       <div className={styles.container}>
         <h1>Appointments</h1>
 
         <h2 className={styles.status}>New</h2>
-        <ul>{newAppointments}</ul>
+        <ul>{renderAppointments("new")}</ul>
       </div>
 
       <div className={styles.container}>
         <h2 className={styles.status}>Confirmed</h2>
-        <ul>{confirmedAppointments}</ul>
+        <ul>{renderAppointments("confirmed")}</ul>
       </div>
 
       <div className={styles.container}>
         <h2 className={styles.status}>Completed</h2>
-        <ul>{completedAppointments}</ul>
+        <ul>{renderAppointments("completed")}</ul>
       </div>
 
       <div className={styles.container}>
         <h2 className={styles.status}>Cancelled</h2>
-        <ul>{canceledAppointments}</ul>
+        <ul>{renderAppointments("cancelled")}</ul>
       </div>
 
       <Modal show={showModal}>
